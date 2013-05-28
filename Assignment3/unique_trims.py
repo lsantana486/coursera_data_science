@@ -1,0 +1,36 @@
+import MapReduce
+import sys
+
+"""
+Trim DNA Example in the Simple Python MapReduce Framework
+"""
+
+mr = MapReduce.MapReduce()
+
+# =============================
+# Do not modify above this line
+
+def mapper(record):
+    # key: document identifier
+    # value: document contents
+    value = record[1]
+    lst=list(value)
+    
+    l=len(lst)
+    for i in range(10):
+        del(lst[l-1])
+        l=len(lst)
+    
+    key = "".join(lst)
+    mr.emit_intermediate(key, 1)
+
+def reducer(key, list_of_values):
+    # key: word
+    # value: list of occurrence counts
+    mr.emit(key)
+
+# Do not modify below this line
+# =============================
+if __name__ == '__main__':
+  inputdata = open(sys.argv[1])
+  mr.execute(inputdata, mapper, reducer)
